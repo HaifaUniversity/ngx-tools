@@ -29,7 +29,7 @@ export class DeactivateGuard implements CanDeactivate<UohDeactivableComponent> {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    // The deactivation logic resides in the component itselft.
+    // The deactivation logic resides in the component itself.
     return component.canDeactivate();
   }
 }

@@ -8,4 +8,4 @@ import { UohEnvironmentService } from '../services/uoh-environment.service';
   exports: [],
   providers: [UOH_ENVIRONMENT_FACTORY, UohEnvironmentService],
 })
-export class NgxToolsModule {}
+export class UohEnvironmentModule {}
