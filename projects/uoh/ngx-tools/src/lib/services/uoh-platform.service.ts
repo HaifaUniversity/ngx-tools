@@ -7,7 +7,13 @@ import {
   supportsScrollBehavior,
   getRtlScrollAxisType,
 } from '@angular/cdk/platform';
-import { WINDOW } from '../models/window.model';
+
+/**
+ * Provides the browser's window object.
+ */
+export const WINDOW = new InjectionToken<Window>(
+  'The window this app is running on.'
+);
 
 /**
  * Retrieves information about the platform running this app.

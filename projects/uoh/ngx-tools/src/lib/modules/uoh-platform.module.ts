@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { WINDOW } from '../models/window.model';
-import { UohPlatform } from '../services/uoh-platform.service';
+import { UohPlatform, WINDOW } from '../services/uoh-platform.service';
 
 @NgModule({
   imports: [CommonModule],
