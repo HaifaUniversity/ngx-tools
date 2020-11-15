@@ -15,21 +15,31 @@ import { WINDOW } from '../models/window.model';
 @Injectable()
 export class UohPlatform {
   /**
-   * The default body screen size if undefined.
+   * The default body width if undefined.
    */
-  private readonly DEFAULT_BODY_SCREEN = {
+  private readonly DEFAULT_BODY_WIDTH = {
     scrollWidth: -1,
     offsetWidth: -1,
+  };
+  /**
+   * The default body height if undefined.
+   */
+  private readonly DEFAULT_BODY_HEIGHT = {
     scrollHeight: -1,
     offsetHeight: -1,
   };
   /**
-   * The default html screen size if undefined.
+   * The default html width if undefined.
    */
-  private readonly DEFAULT_HTML_SCREEN = {
+  private readonly DEFAULT_HTML_WIDTH = {
     clientWidth: -1,
     scrollWidth: -1,
     offsetWidth: -1,
+  };
+  /**
+   * The default html height if undefined.
+   */
+  private readonly DEFAULT_HTML_HEIGHT = {
     clientHeight: -1,
     scrollHeight: -1,
     offsetHeight: -1,
@@ -75,6 +85,56 @@ export class UohPlatform {
   }
 
   /**
+   * Retrieves the document width.
+   */
+  getDocumentWidth(): number {
+    if (!this.document) {
+      return -1;
+    }
+
+    // Merge the default body and html screen size with the actual ones.
+    // The defaults are used as a fallback if the body, the html or one of its parameters is undefined (thus Math.max won't crash).
+    const body = { ...this.DEFAULT_BODY_WIDTH, ...this.document.body };
+    const html = {
+      ...this.DEFAULT_HTML_WIDTH,
+      ...this.document.documentElement,
+    };
+
+    return Math.max(
+      body.scrollWidth,
+      body.offsetWidth,
+      html.clientWidth,
+      html.scrollWidth,
+      html.offsetWidth
+    );
+  }
+
+  /**
+   * Retrieves the document height.
+   */
+  getDocumentHeight(): number {
+    if (!this.document) {
+      return -1;
+    }
+
+    // Merge the default body and html screen size with the actual ones.
+    // The defaults are used as a fallback if the body, the html or one of its parameters is undefined (thus Math.max won't crash).
+    const body = { ...this.DEFAULT_BODY_HEIGHT, ...this.document.body };
+    const html = {
+      ...this.DEFAULT_HTML_HEIGHT,
+      ...this.document.documentElement,
+    };
+
+    return Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+  }
+
+  /**
    * Retrieves the document width and height information.
    */
   private getDocumentScreenInfo(): string {
@@ -82,29 +142,8 @@ export class UohPlatform {
       return '';
     }
 
-    // Merge the default body and html screen size with the actual ones.
-    // The defaults are used as a fallback if the body, the html or one of its parameters is undefined (thus Math.max won't crash).
-    const body = { ...this.DEFAULT_BODY_SCREEN, ...this.document.body };
-    const html = {
-      ...this.DEFAULT_HTML_SCREEN,
-      ...this.document.documentElement,
-    };
-
-    const width = Math.max(
-      body.scrollWidth,
-      body.offsetWidth,
-      html.clientWidth,
-      html.scrollWidth,
-      html.offsetWidth
-    );
-
-    const height = Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight
-    );
+    const width = this.getDocumentWidth();
+    const height = this.getDocumentHeight();
 
     return `Document width: ${width},
       Document height: ${height}`;
