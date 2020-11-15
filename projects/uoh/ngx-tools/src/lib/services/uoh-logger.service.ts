@@ -17,7 +17,7 @@ export class UohLogger {
     @Inject(UOH_LOGGER_URL) private readonly URL: string,
     @Inject(UOH_LOGGER_LEVEL) private level: UohLogLevel
   ) {
-    this.level = !!level ? level : UohLogLevel.Info;
+    this.level = !!level ? level : UohLogLevel.INFO;
   }
 
   /**
@@ -25,7 +25,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   all(...values: Array<string>): void {
-    this.log(UohLogLevel.All, true, ...values);
+    this.log(UohLogLevel.ALL, true, ...values);
   }
 
   /**
@@ -33,7 +33,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   debug(...values: Array<string>): void {
-    this.log(UohLogLevel.Debug, true, ...values);
+    this.log(UohLogLevel.DEBUG, true, ...values);
   }
 
   /**
@@ -41,7 +41,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   info(...values: Array<string>): void {
-    this.log(UohLogLevel.Info, true, ...values);
+    this.log(UohLogLevel.INFO, true, ...values);
   }
 
   /**
@@ -49,7 +49,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   warn(...values: Array<string>): void {
-    this.log(UohLogLevel.Warn, true, ...values);
+    this.log(UohLogLevel.WARN, true, ...values);
   }
 
   /**
@@ -57,7 +57,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   error(...values: Array<string>): void {
-    this.log(UohLogLevel.Error, true, ...values);
+    this.log(UohLogLevel.ERROR, true, ...values);
   }
 
   /**
@@ -65,7 +65,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   fatal(...values: Array<string>): void {
-    this.log(UohLogLevel.Fatal, true, ...values);
+    this.log(UohLogLevel.FATAL, true, ...values);
   }
 
   /**
@@ -76,12 +76,12 @@ export class UohLogger {
    */
   log(level: UohLogLevel, async: boolean, ...values: Array<string>): void {
     // Send the log request only if the level is greater or equal to the level configured in the module.
-    if (level >= this.level) {
+    if (level <= this.level) {
       // Get the name of the key in the log level enum to send it in the request.
       const levelName = UohLogLevel[level] as string;
       const message = this.concatenate(values);
       const log: UohLog = {
-        level: levelName.toUpperCase(),
+        level: levelName,
         message,
       };
 

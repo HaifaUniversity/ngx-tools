@@ -2,12 +2,12 @@ import { InjectionToken } from '@angular/core';
 import { UohLogger } from '../services/uoh-logger.service';
 
 export enum UohLogLevel {
-  All = 0,
-  Debug = 1,
-  Info = 2,
-  Warn = 3,
-  Error = 4,
-  Fatal = 5,
+  FATAL = 0,
+  ERROR = 1,
+  WARN = 2,
+  INFO = 3,
+  DEBUG = 4,
+  ALL = 5,
 }
 
 export interface UohLog {

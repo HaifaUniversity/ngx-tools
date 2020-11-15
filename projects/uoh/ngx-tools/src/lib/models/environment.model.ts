@@ -11,15 +11,6 @@ export enum UohEnvironment {
 }
 
 /**
- * Stores a different url for each environment.
- */
-export interface UohEnvironmentURL {
-  development: string;
-  qa: string;
-  production: string;
-}
-
-/**
  * Retrieves the environment the app is currently running on.
  * @param document The HTML document.
  */
