@@ -135,7 +135,7 @@ export class UohPlatform {
   }
 
   /**
-   * Retrieves the document width and height information.
+   * Retrieves textual information about the document width and height.
    */
   private getDocumentScreenInfo(): string {
     if (!this.document) {
