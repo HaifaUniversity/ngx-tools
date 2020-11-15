@@ -1,11 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { UOH_ENVIRONMENT_FACTORY } from '../models/environment.model';
-import {
-  UohLogLevel,
-  UOH_LOGGER_LEVEL,
-  UOH_LOGGER_URL,
-} from '../models/log.model';
-import { UohLogger } from '../services/uoh-logger.service';
+import { UohLogLevel } from '../models/log.model';
+import { UohLogger, UOH_LOGGER_URL } from '../services/uoh-logger.service';
 
 @NgModule()
 export class UohLoggerModule {
@@ -21,7 +16,7 @@ export class UohLoggerModule {
           useValue: url,
         },
         {
-          provide: UOH_LOGGER_LEVEL,
+          provide: UOH_LOGGER_URL,
           useValue: level,
         },
         {

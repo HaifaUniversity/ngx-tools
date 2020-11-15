@@ -1,11 +1,20 @@
-import { Inject, Injectable, NgZone } from '@angular/core';
+import { Inject, Injectable, InjectionToken, NgZone } from '@angular/core';
 
-import {
-  UohLog,
-  UohLogLevel,
-  UOH_LOGGER_LEVEL,
-  UOH_LOGGER_URL,
-} from '../models/log.model';
+import { UohLog, UohLogLevel } from '../models/log.model';
+
+/**
+ * Provides the url for the logger.
+ */
+export const UOH_LOGGER_URL = new InjectionToken<string>(
+  'The url were to send the UohLogger requests.'
+);
+
+/**
+ * Provides the log level for the logger.
+ */
+export const UOH_LOGGER_LEVEL = new InjectionToken<string>(
+  'The log level for the UohLogger.'
+);
 
 /**
  * Logs values to a backend service.
