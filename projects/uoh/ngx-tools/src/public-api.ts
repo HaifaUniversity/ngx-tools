@@ -20,3 +20,5 @@ export * from './lib/modules/uoh-logger.module';
 export * from './lib/services/uoh-platform.service';
 export * from './lib/models/window.model';
 export * from './lib/services/uoh-platform.service';
+
+export * from './lib/validators/id.validator';
