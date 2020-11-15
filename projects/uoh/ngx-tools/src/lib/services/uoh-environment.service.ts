@@ -5,9 +5,7 @@ import {
   UOH_ENVIRONMENT,
 } from '../models/environment.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class UohEnvironmentService {
   constructor(@Inject(UOH_ENVIRONMENT) private environment: UohEnvironment) {}
 
