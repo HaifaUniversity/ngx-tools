@@ -1,4 +1,5 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import {
   Platform,
   getSupportedInputTypes,
@@ -8,11 +9,36 @@ import {
 } from '@angular/cdk/platform';
 import { WINDOW } from '../models/window.model';
 
+/**
+ * Retrieves information about the platform running this app.
+ */
 @Injectable()
 export class UohPlatform {
+  /**
+   * The default body screen size if undefined.
+   */
+  private readonly DEFAULT_BODY_SCREEN = {
+    scrollWidth: -1,
+    offsetWidth: -1,
+    scrollHeight: -1,
+    offsetHeight: -1,
+  };
+  /**
+   * The default html screen size if undefined.
+   */
+  private readonly DEFAULT_HTML_SCREEN = {
+    clientWidth: -1,
+    scrollWidth: -1,
+    offsetWidth: -1,
+    clientHeight: -1,
+    scrollHeight: -1,
+    offsetHeight: -1,
+  };
+
   constructor(
     private platform: Platform,
-    @Inject(WINDOW) private window: Window
+    @Inject(WINDOW) private window: Window,
+    @Inject(DOCUMENT) private document: Document
   ) {}
 
   /**
@@ -23,7 +49,8 @@ export class UohPlatform {
     const passiveEventListeners = supportsPassiveEventListeners();
     const scrollBehavior = supportsScrollBehavior();
     const rtlScrollAxisType = getRtlScrollAxisType();
-    const screen = this.getScreenInfo();
+    const windowScreen = this.getWindowScreenInfo();
+    const documentScreen = this.getDocumentScreenInfo();
     const browser = this.getBrowserInfo();
 
     const info = `Platform Information:
@@ -40,16 +67,53 @@ export class UohPlatform {
       Supports passive event listeners: ${passiveEventListeners},
       Supports scroll behavior: ${scrollBehavior},
       RTL scroll axis type: ${rtlScrollAxisType},
-      ${screen},
+      ${windowScreen},
+      ${documentScreen},
       ${browser}`;
 
     return info;
   }
 
   /**
-   * Retrieves the screen information.
+   * Retrieves the document width and height information.
    */
-  private getScreenInfo(): string {
+  private getDocumentScreenInfo(): string {
+    if (!this.document) {
+      return '';
+    }
+
+    // Merge the default body and html screen size with the actual ones.
+    // The defaults are used as a fallback if the body, the html or one of its parameters is undefined (thus Math.max won't crash).
+    const body = { ...this.DEFAULT_BODY_SCREEN, ...this.document.body };
+    const html = {
+      ...this.DEFAULT_HTML_SCREEN,
+      ...this.document.documentElement,
+    };
+
+    const width = Math.max(
+      body.scrollWidth,
+      body.offsetWidth,
+      html.clientWidth,
+      html.scrollWidth,
+      html.offsetWidth
+    );
+
+    const height = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+
+    return `Document width: ${width},
+      Document height: ${height}`;
+  }
+
+  /**
+   * Retrieves the window screen information.
+   */
+  private getWindowScreenInfo(): string {
     if (!this.window) {
       return '';
     }
