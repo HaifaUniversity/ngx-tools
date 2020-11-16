@@ -18,6 +18,8 @@ export const WINDOW = new InjectionToken<Window>(
 /**
  * Retrieves information about the platform running this app.
  */
+// The following comment (dynamic) avoids Window type errors on "strictMetadataEmit": true
+/** @dynamic */
 @Injectable()
 export class UohPlatform {
   /**

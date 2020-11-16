@@ -1,7 +1,7 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 /**
- * Validates israeli ids.
+ * Validates Israeli IDs.
  */
 export function idValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
