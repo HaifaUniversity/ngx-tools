@@ -11,7 +11,8 @@ import { UohDeactivableComponent } from '../models/deactivable.model';
 @Injectable({
   providedIn: 'root',
 })
-export class DeactivateGuard implements CanDeactivate<UohDeactivableComponent> {
+export class UohDeactivateGuard
+  implements CanDeactivate<UohDeactivableComponent> {
   /**
    * Checks if a component that implements the deactivable interface can be deactivated.
    * @param component The deactivable component.
