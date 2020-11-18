@@ -11,14 +11,11 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
     "paths": {
-      "@uoh/ngx-tools": [
-        "dist/uoh/ngx-tools/uoh-ngx-tools",
-        "dist/uoh/ngx-tools"
+      "@haifauniversity/ngx-tools": [
+        "dist/haifauniversity/ngx-tools/uoh-ngx-tools",
+        "dist/haifauniversity/ngx-tools"
       ]
     }
   }

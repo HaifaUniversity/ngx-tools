@@ -3,45 +3,44 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "@uoh/ngx-tools": {
+    "@haifauniversity/ngx-tools": {
       "projectType": "library",
-      "root": "projects/uoh/ngx-tools",
-      "sourceRoot": "projects/uoh/ngx-tools/src",
+      "root": "projects/haifauniversity/ngx-tools",
+      "sourceRoot": "projects/haifauniversity/ngx-tools/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/uoh/ngx-tools/tsconfig.lib.json",
-            "project": "projects/uoh/ngx-tools/ng-package.json"
+            "tsConfig": "projects/haifauniversity/ngx-tools/tsconfig.lib.json",
+            "project": "projects/haifauniversity/ngx-tools/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/uoh/ngx-tools/tsconfig.lib.prod.json"
+              "tsConfig": "projects/haifauniversity/ngx-tools/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/uoh/ngx-tools/src/test.ts",
-            "tsConfig": "projects/uoh/ngx-tools/tsconfig.spec.json",
-            "karmaConfig": "projects/uoh/ngx-tools/karma.conf.js"
+            "main": "projects/haifauniversity/ngx-tools/src/test.ts",
+            "tsConfig": "projects/haifauniversity/ngx-tools/tsconfig.spec.json",
+            "karmaConfig": "projects/haifauniversity/ngx-tools/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/uoh/ngx-tools/tsconfig.lib.json",
-              "projects/uoh/ngx-tools/tsconfig.spec.json"
+              "projects/haifauniversity/ngx-tools/tsconfig.lib.json",
+              "projects/haifauniversity/ngx-tools/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
-    }},
-  "defaultProject": "@uoh/ngx-tools"
+    }
+  },
+  "defaultProject": "@haifauniversity/ngx-tools"
 }
