@@ -5,8 +5,8 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "peerDependencies": {
-    "@angular/common": "^10.2.0",
-    "@angular/core": "^10.2.0",
+    "@angular/common": "^10.0.0",
+    "@angular/core": "^10.0.0",
     "@angular/cdk": "^10.0.0"
   },
   "dependencies": {
