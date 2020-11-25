@@ -1,10 +1,6 @@
 import { UrlTree } from '@angular/router';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs';
 
 export interface UohDeactivableComponent {
-  canDeactivate():
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree;
+  canDeactivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree;
 }
