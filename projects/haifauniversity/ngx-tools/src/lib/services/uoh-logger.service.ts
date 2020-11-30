@@ -1,20 +1,17 @@
 import { Inject, Injectable, InjectionToken, NgZone } from '@angular/core';
 
 import { UohLog, UohLogLevel } from '../models/log.model';
+import { UohLoggerId } from './uoh-logger-id.service';
 
 /**
  * Provides the url for the logger.
  */
-export const UOH_LOGGER_URL = new InjectionToken<string>(
-  'The url were to send the UohLogger requests.'
-);
+export const UOH_LOGGER_URL = new InjectionToken<string>('The url were to send the UohLogger requests.');
 
 /**
  * Provides the log level for the logger.
  */
-export const UOH_LOGGER_LEVEL = new InjectionToken<string>(
-  'The log level for the UohLogger.'
-);
+export const UOH_LOGGER_LEVEL = new InjectionToken<string>('The log level for the UohLogger.');
 
 /**
  * Logs values to a backend service.
@@ -24,7 +21,8 @@ export class UohLogger {
   constructor(
     private ngZone: NgZone,
     @Inject(UOH_LOGGER_URL) private readonly URL: string,
-    @Inject(UOH_LOGGER_LEVEL) private level: UohLogLevel
+    @Inject(UOH_LOGGER_LEVEL) private level: UohLogLevel,
+    private id: UohLoggerId
   ) {
     this.level = !!level ? level : UohLogLevel.INFO;
   }
@@ -98,11 +96,20 @@ export class UohLogger {
     }
   }
 
+  /**
+   * Posts the given content to the given url.
+   * @param url The url to post to.
+   * @param content The content to post.
+   * @param async Whether to send an async or sync request.
+   */
   private post(url: string, content: string, async = true): void {
     this.ngZone.runOutsideAngular(() => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', url, async);
       xhr.setRequestHeader('Content-Type', 'application/json');
+      if (!!this.id.get()) {
+        xhr.setRequestHeader(UohLoggerId.HEADER_KEY, this.id.get());
+      }
       xhr.send(content);
     });
   }
