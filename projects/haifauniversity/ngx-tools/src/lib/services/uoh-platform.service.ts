@@ -11,9 +11,7 @@ import {
 /**
  * Provides the browser's window object.
  */
-export const WINDOW = new InjectionToken<Window>(
-  'The window this app is running on.'
-);
+export const WINDOW = new InjectionToken<Window>('The window this app is running on.');
 
 /**
  * Retrieves information about the platform running this app.
@@ -70,24 +68,27 @@ export class UohPlatform {
     const windowScreen = this.getWindowScreenInfo();
     const documentScreen = this.getDocumentScreenInfo();
     const browser = this.getBrowserInfo();
+    const url = !!document ? document.URL : '';
 
-    const info = `Platform Information:
-      Browser: ${this.platform.isBrowser},
-      Android: ${this.platform.ANDROID},
-      iOS: ${this.platform.IOS},
-      Firefox: ${this.platform.FIREFOX},
-      Blink: ${this.platform.BLINK},
-      Webkit: ${this.platform.WEBKIT},
-      Trident: ${this.platform.TRIDENT},
-      Edge: ${this.platform.EDGE},
-      Safari: ${this.platform.SAFARI},
-      Supported input types: ${supportedInputTypes},
-      Supports passive event listeners: ${passiveEventListeners},
-      Supports scroll behavior: ${scrollBehavior},
-      RTL scroll axis type: ${rtlScrollAxisType},
-      ${windowScreen},
-      ${documentScreen},
-      ${browser}`;
+    const info =
+      'Platform Information:' +
+      ` URL: ${url},` +
+      ` Browser: ${this.platform.isBrowser},` +
+      ` Android: ${this.platform.ANDROID},` +
+      ` iOS: ${this.platform.IOS},` +
+      ` Firefox: ${this.platform.FIREFOX},` +
+      ` Blink: ${this.platform.BLINK},` +
+      ` Webkit: ${this.platform.WEBKIT},` +
+      ` Trident: ${this.platform.TRIDENT},` +
+      ` Edge: ${this.platform.EDGE},` +
+      ` Safari: ${this.platform.SAFARI},` +
+      ` Supported input types: ${supportedInputTypes},` +
+      ` Supports passive event listeners: ${passiveEventListeners},` +
+      ` Supports scroll behavior: ${scrollBehavior},` +
+      ` RTL scroll axis type: ${rtlScrollAxisType},` +
+      ` ${windowScreen},` +
+      ` ${documentScreen},` +
+      ` ${browser}`;
 
     return info;
   }
@@ -108,13 +109,7 @@ export class UohPlatform {
       ...this.document.documentElement,
     };
 
-    return Math.max(
-      body.scrollWidth,
-      body.offsetWidth,
-      html.clientWidth,
-      html.scrollWidth,
-      html.offsetWidth
-    );
+    return Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
   }
 
   /**
@@ -133,13 +128,7 @@ export class UohPlatform {
       ...this.document.documentElement,
     };
 
-    return Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight
-    );
+    return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
   }
 
   /**
