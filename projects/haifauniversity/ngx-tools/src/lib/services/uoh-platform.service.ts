@@ -142,8 +142,7 @@ export class UohPlatform {
     const width = this.getDocumentWidth();
     const height = this.getDocumentHeight();
 
-    return `Document width: ${width},
-      Document height: ${height}`;
+    return `Document width: ${width}, Document height: ${height}`;
   }
 
   /**
@@ -154,15 +153,14 @@ export class UohPlatform {
       return '';
     }
 
-    const basic = `Inner width: ${this.window.innerWidth},
-      Inner height: ${this.window.innerHeight}`;
+    const basic = `Inner width: ${this.window.innerWidth}, Inner height: ${this.window.innerHeight}`;
 
     return !!this.window.screen
-      ? `Width: ${this.window.screen.width},
-      Height: ${this.window.screen.height},
-      Available width: ${this.window.screen.availWidth},
-      Available height: ${this.window.screen.availHeight},
-      ${basic}`
+      ? `Width: ${this.window.screen.width},` +
+          ` Height: ${this.window.screen.height},` +
+          ` Available width: ${this.window.screen.availWidth},` +
+          ` Available height: ${this.window.screen.availHeight},` +
+          ` ${basic}`
       : basic;
   }
 
@@ -174,9 +172,7 @@ export class UohPlatform {
       return '';
     }
 
-    return `Browser Vendor: ${this.window.navigator.vendor},
-        User Agent: ${this.window.navigator.userAgent},
-        Platform: ${this.window.navigator.platform}`;
+    return `Browser Vendor: ${this.window.navigator.vendor}, User Agent: ${this.window.navigator.userAgent}, Platform: ${this.window.navigator.platform}`;
   }
 
   /**
