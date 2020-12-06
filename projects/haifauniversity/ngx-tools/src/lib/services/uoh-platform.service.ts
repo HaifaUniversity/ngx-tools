@@ -68,7 +68,7 @@ export class UohPlatform {
     const windowScreen = this.getWindowScreenInfo();
     const documentScreen = this.getDocumentScreenInfo();
     const browser = this.getBrowserInfo();
-    const url = !!document ? document.URL : '';
+    const url = !!this.document ? this.document.URL : '';
 
     const info =
       'Platform Information:' +
