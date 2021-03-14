@@ -1,7 +1,9 @@
-import { Inject, Injectable, InjectionToken, NgZone } from '@angular/core';
+import { Inject, Injectable, InjectionToken, OnDestroy } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 
 import { UohLog, UohLogLevel } from '../models/log.model';
-import { UohLoggerId } from './uoh-logger-id.service';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 /**
  * Provides the url for the logger.
@@ -14,17 +16,34 @@ export const UOH_LOGGER_URL = new InjectionToken<string>('The url were to send t
 export const UOH_LOGGER_LEVEL = new InjectionToken<string>('The log level for the UohLogger.');
 
 /**
+ * A header used to mark the requests sent by the UohLogger.
+ */
+export const UOH_LOGGER_HEADER = 'uoh-logger';
+
+/**
+ * Checks if a HTTP request was sent by the UohLogger (useful for interceptors).
+ * @param request The HTTP request.
+ * @returns True if the request was sent by the UohLogger, false otherwise.
+ */
+export const isUohLogger = (request: HttpRequest<any>) => !!request.headers && !!request.headers.get(UOH_LOGGER_HEADER);
+
+/**
  * Logs values to a backend service.
  */
 @Injectable()
-export class UohLogger {
+export class UohLogger implements OnDestroy {
+  private subscription = new Subscription();
+
   constructor(
-    private ngZone: NgZone,
+    private http: HttpClient,
     @Inject(UOH_LOGGER_URL) private readonly URL: string,
-    @Inject(UOH_LOGGER_LEVEL) private level: UohLogLevel,
-    private id: UohLoggerId
+    @Inject(UOH_LOGGER_LEVEL) private level: UohLogLevel
   ) {
     this.level = !!level ? level : UohLogLevel.INFO;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   /**
@@ -32,7 +51,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   all(...values: Array<string>): void {
-    this.log(UohLogLevel.ALL, true, ...values);
+    this.log(UohLogLevel.ALL, ...values);
   }
 
   /**
@@ -40,7 +59,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   debug(...values: Array<string>): void {
-    this.log(UohLogLevel.DEBUG, true, ...values);
+    this.log(UohLogLevel.DEBUG, ...values);
   }
 
   /**
@@ -48,7 +67,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   info(...values: Array<string>): void {
-    this.log(UohLogLevel.INFO, true, ...values);
+    this.log(UohLogLevel.INFO, ...values);
   }
 
   /**
@@ -56,7 +75,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   warn(...values: Array<string>): void {
-    this.log(UohLogLevel.WARN, true, ...values);
+    this.log(UohLogLevel.WARN, ...values);
   }
 
   /**
@@ -64,7 +83,7 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   error(...values: Array<string>): void {
-    this.log(UohLogLevel.ERROR, true, ...values);
+    this.log(UohLogLevel.ERROR, ...values);
   }
 
   /**
@@ -72,16 +91,15 @@ export class UohLogger {
    * @param values The comma separated values.
    */
   fatal(...values: Array<string>): void {
-    this.log(UohLogLevel.FATAL, true, ...values);
+    this.log(UohLogLevel.FATAL, ...values);
   }
 
   /**
    * Prints the given values to log.
    * @param level The log level.
-   * @param async Whether to perform an async (true) or sync (false) xhr request.
    * @param values The values to log.
    */
-  log(level: UohLogLevel, async: boolean, ...values: Array<string>): void {
+  log(level: UohLogLevel, ...values: Array<string>): void {
     // Send the log request only if the level is greater or equal to the level configured in the module.
     if (level <= this.level) {
       // Get the name of the key in the log level enum to send it in the request.
@@ -92,7 +110,7 @@ export class UohLogger {
         message,
       };
 
-      this.post(this.URL, JSON.stringify(log), async);
+      this.post(this.URL, JSON.stringify(log));
     }
   }
 
@@ -100,18 +118,11 @@ export class UohLogger {
    * Posts the given content to the given url.
    * @param url The url to post to.
    * @param content The content to post.
-   * @param async Whether to send an async or sync request.
    */
-  private post(url: string, content: string, async = true): void {
-    this.ngZone.runOutsideAngular(() => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', url, async);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      if (!!this.id.get()) {
-        xhr.setRequestHeader(UohLoggerId.HEADER_KEY, this.id.get());
-      }
-      xhr.send(content);
-    });
+  private post(url: string, content: string): void {
+    const headers = new HttpHeaders().set(UOH_LOGGER_HEADER, 'true');
+
+    this.subscription.add(this.http.post(url, content, { headers }).pipe(take(1)).subscribe());
   }
 
   /**
