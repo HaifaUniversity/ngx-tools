@@ -20,37 +20,6 @@ export const WINDOW = new InjectionToken<Window>('The window this app is running
 /** @dynamic */
 @Injectable()
 export class UohPlatform {
-  /**
-   * The default body width if undefined.
-   */
-  private readonly DEFAULT_BODY_WIDTH = {
-    scrollWidth: -1,
-    offsetWidth: -1,
-  };
-  /**
-   * The default body height if undefined.
-   */
-  private readonly DEFAULT_BODY_HEIGHT = {
-    scrollHeight: -1,
-    offsetHeight: -1,
-  };
-  /**
-   * The default html width if undefined.
-   */
-  private readonly DEFAULT_HTML_WIDTH = {
-    clientWidth: -1,
-    scrollWidth: -1,
-    offsetWidth: -1,
-  };
-  /**
-   * The default html height if undefined.
-   */
-  private readonly DEFAULT_HTML_HEIGHT = {
-    clientHeight: -1,
-    scrollHeight: -1,
-    offsetHeight: -1,
-  };
-
   constructor(
     private platform: Platform,
     @Inject(WINDOW) private window: Window,
@@ -94,41 +63,67 @@ export class UohPlatform {
   }
 
   /**
-   * Retrieves the document width.
+   * Retrieves the document width or -1 if undefined.
    */
   getDocumentWidth(): number {
     if (!this.document) {
       return -1;
     }
 
-    // Merge the default body and html screen size with the actual ones.
-    // The defaults are used as a fallback if the body, the html or one of its parameters is undefined (thus Math.max won't crash).
-    const body = { ...this.DEFAULT_BODY_WIDTH, ...this.document.body };
-    const html = {
-      ...this.DEFAULT_HTML_WIDTH,
-      ...this.document.documentElement,
-    };
+    // Get the max width between the body and the document element.
+    const body = this.getMaxWidth(this.document.body);
+    const html = this.getMaxWidth(this.document.documentElement);
 
-    return Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
+    return Math.max(body, html);
   }
 
   /**
-   * Retrieves the document height.
+   * Retrieves the document height or -1 if undefined.
    */
   getDocumentHeight(): number {
     if (!this.document) {
       return -1;
     }
 
-    // Merge the default body and html screen size with the actual ones.
-    // The defaults are used as a fallback if the body, the html or one of its parameters is undefined (thus Math.max won't crash).
-    const body = { ...this.DEFAULT_BODY_HEIGHT, ...this.document.body };
-    const html = {
-      ...this.DEFAULT_HTML_HEIGHT,
-      ...this.document.documentElement,
-    };
+    // Get the max height between the body and the document element.
+    const body = this.getMaxHeight(this.document.body);
+    const html = this.getMaxHeight(this.document.documentElement);
 
-    return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    return Math.max(body, html);
+  }
+
+  /**
+   * Returns the maximum width for the given element (from scroll, offset and client widths).
+   * @param element The HTML element.
+   * @returns The maximum width for the given element or -1 if undefined.
+   */
+  private getMaxWidth(element: HTMLElement): number {
+    if (!element) {
+      return -1;
+    }
+
+    const scrollWidth = !!element.scrollWidth ? element.scrollWidth : -1;
+    const offsetWidth = !!element.offsetWidth ? element.offsetWidth : -1;
+    const clientWidth = !!element.clientWidth ? element.clientWidth : -1;
+
+    return Math.max(scrollWidth, offsetWidth, clientWidth);
+  }
+
+  /**
+   * Returns the maximum height for the given element (from scroll, offset and client heights).
+   * @param element The HTML element.
+   * @returns The maximum height for the given element or -1 if undefined.
+   */
+  private getMaxHeight(element: HTMLElement): number {
+    if (!element) {
+      return -1;
+    }
+
+    const scrollHeight = !!element.scrollHeight ? element.scrollHeight : -1;
+    const offsetHeight = !!element.offsetHeight ? element.offsetHeight : -1;
+    const clientHeight = !!element.clientHeight ? element.clientHeight : -1;
+
+    return Math.max(scrollHeight, offsetHeight, clientHeight);
   }
 
   /**
