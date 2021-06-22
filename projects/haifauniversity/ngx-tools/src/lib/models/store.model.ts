@@ -2,6 +2,29 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 
 /**
+ * Merger Function Interface
+ */
+export interface MergerFn<T> {
+  (currState: T, newState: T | Partial<T> ): T
+}
+
+/**
+ * Merge current state with new state using Object.assign function
+ * @param currState current state
+ * @param newState new state to merge with current state
+ * @returns merged state+
+ */
+export const objectAssignMergerFn = <T>(currState: T, newState: Partial<T>) => Object.assign({}, currState, newState) as T;
+
+/**
+ * Override function that simply returns the new state
+ * @param _ current state
+ * @param newState new state to override
+ * @returns newState
+ */
+export const overrideMergerFn = <T>(_: T, newState: T) => newState;
+
+/**
  * Stores values to be used within a service or component.
  */
 export class UohStore<T> {
@@ -18,7 +41,8 @@ export class UohStore<T> {
   constructor(
     initialState: T,
     private storageKey?: string,
-    private storage = sessionStorage
+    private storage = sessionStorage,
+    private mergerFn: MergerFn<T> = objectAssignMergerFn
   ) {
     this.initialState = this.storageKey
       ? this.getFromStorage(initialState, this.storageKey)
@@ -44,12 +68,20 @@ export class UohStore<T> {
   }
 
   /**
+   * Override the state of the store with a partial static object
+   * @param state A partial object containing updates for the state.
+   */
+  overrideState(state: T) {
+    this.setState(state, overrideMergerFn as MergerFn<T>);
+  }
+
+  /**
    * Update the state of the store by passing a partial static object.
    * @param state A partial object containing updates for the state.
    */
-  setState(state: Partial<T>): void {
+  setState(state: Partial<T>, mergerFn: MergerFn<T> = this.mergerFn): void {
     // Use Object.assign to overcome an issue of typescript with the spread operator on generic types
-    this.store$.next(Object.assign({}, this.getState(), state));
+    this.store$.next(mergerFn(this.getState(), state));
     this.save();
   }
 
