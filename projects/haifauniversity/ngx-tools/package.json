@@ -1,6 +1,6 @@
 {
   "name": "@haifauniversity/ngx-tools",
-  "version": "11.3.0",
+  "version": "12.0.0",
   "publishConfig": {
     "cache": ".npm",
     "registry": "https://npm.pkg.github.com/"
