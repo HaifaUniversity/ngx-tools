@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "pack-dist": "cd dist/haifauniversity/ngx-tools && npm pack",
-    "pack": "ng build --prod && npm run pack-dist"
+    "pack": "ng build --prod && npm run pack-dist",
+    "publish": "npm publish dist/haifauniversity/ngx-tools/haifauniversity-ngx-tools-12.0.0.tgz --tag=latest"
   },
   "private": true,
   "dependencies": {
